@@ -11,32 +11,60 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page"),
+        backgroundColor: const Color.fromARGB(255, 199, 0, 0),
+        centerTitle: true,
+        leadingWidth: 90,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Center(
+            child: Text(
+              'Hi, $username!',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        title: Image.asset(
+          'assets/images/logo-gravy.png',
+          height: 200,
+        ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const LoginPage();
-                    },
-                  ),
-                  (route) => false,
-                );
-              },
-              icon: const Icon(Icons.logout_outlined)),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const LoginPage();
+                  },
+                ),
+                (route) => false,
+              );
+            },
+            icon: const Icon(Icons.logout_outlined),
+            color: Colors.white,
+          ),
         ],
       ),
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Text(
-              "Welcome $username",
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/images/banner.png', 
+                fit: BoxFit.cover, 
+                width: double.infinity,
+                height: 150, 
+              ),
             ),
           ),
+          const SizedBox(height: 16), 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: GridView.builder(
@@ -71,7 +99,7 @@ class HomePage extends StatelessWidget {
           border: Border.all(color: Colors.grey.shade300, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withOpacity(0.3),
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, 3),
@@ -113,7 +141,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 6,
+                flex: 4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -135,7 +163,7 @@ class HomePage extends StatelessWidget {
                           fontSize: 12,
                           color: Colors.grey[600],
                         ),
-                        maxLines: 2,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const Spacer(),
@@ -143,7 +171,7 @@ class HomePage extends StatelessWidget {
                         food.price,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepPurple,
+                          color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 14,
                         ),
                       ),

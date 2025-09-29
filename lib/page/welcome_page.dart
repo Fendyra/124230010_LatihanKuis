@@ -15,7 +15,7 @@ class _WelcomePageState extends State<WelcomePage> {
   void initState() {
     super.initState();
     // Navigasi ke halaman LoginPage setelah 3 detik
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
