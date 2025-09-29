@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_kuis/page/welcome_page.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -11,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Gravy App', // Anda bisa ganti namanya juga
+      title: 'Gravy App', 
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
     );
