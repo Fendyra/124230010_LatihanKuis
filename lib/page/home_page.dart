@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latihan_kuis/auth/login_page.dart';
 import 'package:latihan_kuis/data/food_menu.dart';
 import 'package:latihan_kuis/models/food_menu_model.dart';
+import 'package:latihan_kuis/page/order_menu_page.dart'; // Impor DetailPage
 
 class HomePage extends StatelessWidget {
   final String username;
@@ -53,18 +54,19 @@ class HomePage extends StatelessWidget {
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(
-                'assets/images/banner.png', 
-                fit: BoxFit.cover, 
+                'assets/images/banner.png',
+                fit: BoxFit.cover,
                 width: double.infinity,
-                height: 150, 
+                height: 150,
               ),
             ),
           ),
-          const SizedBox(height: 16), 
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: GridView.builder(
@@ -74,11 +76,11 @@ class HomePage extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 0.65,
+                childAspectRatio: 0.60, // Sedikit diubah agar tombol muat
               ),
               itemBuilder: (context, index) {
                 final FoodMenu food = foodMenuList[index];
-                return _foodCard(food);
+                return _foodCard(context, food); // Kirim context
               },
               itemCount: foodMenuList.length,
             ),
@@ -89,9 +91,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _foodCard(FoodMenu food) {
+  Widget _foodCard(BuildContext context, FoodMenu food) {
+    bool isNetworkImage = food.imageUrl.startsWith('http');
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPage(food: food),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -113,35 +123,33 @@ class HomePage extends StatelessWidget {
             children: [
               Expanded(
                 flex: 5,
-                child: Builder(
-                  builder: (context) {
-                    bool isNetworkImage = food.imageUrl.startsWith('http');
-                    if (isNetworkImage) {
-                      return Image.network(
-                        food.imageUrl,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(
-                              child: Icon(Icons.image_not_supported_outlined));
-                        },
-                      );
-                    } else {
-                      return Image.asset(
-                        food.imageUrl,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(
-                              child: Icon(Icons.broken_image_outlined));
-                        },
-                      );
-                    }
-                  },
+                child: Hero(
+                  tag: food.imageUrl, 
+                  child: isNetworkImage
+                      ? Image.network(
+                          food.imageUrl,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                                child: Icon(Icons.image_not_supported_outlined)
+                            );
+                          },
+                        )
+                      : Image.asset(
+                          food.imageUrl,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                                child: Icon(Icons.broken_image_outlined)
+                            );
+                          },
+                        ),
                 ),
               ),
               Expanded(
-                flex: 4,
+                flex: 5, 
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -163,7 +171,7 @@ class HomePage extends StatelessWidget {
                           fontSize: 12,
                           color: Colors.grey[600],
                         ),
-                        maxLines: 3,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const Spacer(),
@@ -173,6 +181,33 @@ class HomePage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Tombol Order
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPage(food: food),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 199, 0, 0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Text(
+                            'Order',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
                         ),
                       ),
                     ],

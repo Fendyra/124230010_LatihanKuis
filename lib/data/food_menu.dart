@@ -5,7 +5,7 @@ List<FoodMenu> foodMenuList = [
     name: 'Classic Cheeseburger',
     releaseDate: 'Available Daily',
     tags: ['Burger', 'Cheese', 'Beef', 'Fast Food'],
-    price: 'Rp.359.000,00',
+    price: 'Rp.69.000,00',
     about:
         'Juicy grilled beef patty topped with melted cheddar cheese, fresh lettuce, tomato, and our signature sauce.',
     imageUrl: 'assets/images/classic-burger.jpg',
