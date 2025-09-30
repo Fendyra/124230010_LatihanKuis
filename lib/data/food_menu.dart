@@ -30,7 +30,7 @@ List<FoodMenu> foodMenuList = [
     price: 'Rp.150.000,00',
     about:
         'Classic creamy pasta with parmesan cheese, crispy bacon, and a touch of garlic for rich flavor.',
-    imageUrl: 'assets/images/spagetti-carbonara.jpg',
+    imageUrl: 'assets/images/spaghetti-carbonara.jpeg',
     reviewAverage: '89%',
     reviewCount: '930',
   ),
@@ -52,7 +52,7 @@ List<FoodMenu> foodMenuList = [
     price: 'Rp.220.000,00',
     about:
         'Assorted sushi rolls with fresh salmon, tuna, avocado, cucumber, and shrimp served with wasabi and soy sauce.',
-    imageUrl: 'https://images.unsplash.com/photo-1553621042-f6e147245754',
+    imageUrl: 'assets/images/sushi-platter.jpeg',
     reviewAverage: '97%',
     reviewCount: '2680',
   ),
@@ -63,7 +63,7 @@ List<FoodMenu> foodMenuList = [
     price: 'Rp.450.000,00',
     about:
         'Grilled sirloin steak cooked to perfection, served with crispy golden fries and herb butter.',
-    imageUrl: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141',
+    imageUrl: 'assets/images/steak-fries.jpeg',
     reviewAverage: '94%',
     reviewCount: '1587',
   ),

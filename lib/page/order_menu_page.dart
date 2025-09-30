@@ -1,14 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:latihan_kuis/models/food_menu_model.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final FoodMenu food;
 
   const DetailPage({super.key, required this.food});
 
   @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  int _quantity = 1;
+  double _totalPrice = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _calculateTotalPrice();
+  }
+
+  void _calculateTotalPrice() {
+    String mainPricePart = widget.food.price.split(',')[0];
+    final priceString = mainPricePart.replaceAll(RegExp(r'[^0-9]'), '');
+    final price = double.parse(priceString);
+
+    setState(() {
+      _totalPrice = price * _quantity;
+    });
+  }
+
+  void _incrementQuantity() {
+    setState(() {
+      _quantity++;
+      _calculateTotalPrice();
+    });
+  }
+
+  void _decrementQuantity() {
+    if (_quantity > 1) {
+      setState(() {
+        _quantity--;
+        _calculateTotalPrice();
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool isNetworkImage = food.imageUrl.startsWith('http');
+    bool isNetworkImage = widget.food.imageUrl.startsWith('http');
+    final currencyFormatter =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
     return Scaffold(
       appBar: AppBar(
@@ -19,13 +62,12 @@ class DetailPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Gambar utama
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Hero(
-              tag: food.imageUrl, // Tag Hero harus unik
+              tag: widget.food.imageUrl,
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(40),
@@ -33,13 +75,13 @@ class DetailPage extends StatelessWidget {
                 ),
                 child: isNetworkImage
                     ? Image.network(
-                        food.imageUrl,
+                        widget.food.imageUrl,
                         height: MediaQuery.of(context).size.height * 0.5,
                         width: double.infinity,
                         fit: BoxFit.cover,
                       )
                     : Image.asset(
-                        food.imageUrl,
+                        widget.food.imageUrl,
                         height: MediaQuery.of(context).size.height * 0.5,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -47,8 +89,6 @@ class DetailPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Konten Detail
           Positioned(
             top: MediaQuery.of(context).size.height * 0.45,
             left: 0,
@@ -67,21 +107,38 @@ class DetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Nama Makanan dan Harga
+                    Text(
+                      widget.food.name,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Text(
-                            food.name,
-                            style: const TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle_outline),
+                              onPressed: _decrementQuantity,
+                              color: Colors.red,
                             ),
-                          ),
+                            Text(
+                              '$_quantity',
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add_circle_outline),
+                              onPressed: _incrementQuantity,
+                              color: Colors.green,
+                            ),
+                          ],
                         ),
                         Text(
-                          food.price,
+                          currencyFormatter.format(_totalPrice),
                           style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -91,12 +148,10 @@ class DetailPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-
-                    // Tags
                     Wrap(
                       spacing: 8.0,
                       runSpacing: 4.0,
-                      children: food.tags
+                      children: widget.food.tags
                           .map((tag) => Chip(
                                 label: Text(tag),
                                 backgroundColor: Colors.red.withOpacity(0.1),
@@ -106,8 +161,6 @@ class DetailPage extends StatelessWidget {
                           .toList(),
                     ),
                     const SizedBox(height: 24),
-
-                    // About
                     const Text(
                       'About',
                       style:
@@ -115,7 +168,7 @@ class DetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      food.about,
+                      widget.food.about,
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey[700],
@@ -129,7 +182,6 @@ class DetailPage extends StatelessWidget {
           ),
         ],
       ),
-      // Tombol "Add to Cart"
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(20),
         color: Colors.white,
@@ -142,17 +194,17 @@ class DetailPage extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            // Logika untuk menambahkan ke keranjang
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('${food.name} added to cart! 🔥'),
+                content:
+                    Text('$_quantity ${widget.food.name} added to cart!'),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 2),
               ),
             );
           },
           child: const Text(
-            'Add to Cart 🛒',
+            'Order Now',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
